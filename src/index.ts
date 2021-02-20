@@ -65,7 +65,8 @@ export function watchFiles(storage: typeof Storage) {
       updateCommands(commandLogger, commandPath)
     })
     .on('add', (commandPath) => {
-      const commandLogger = appLogger.scope()
+      const fixedCommandPath = path.basename(commandPath)
+      const commandLogger = appLogger.scope(fixedCommandPath)
 
       updateCommands(commandLogger, commandPath)
     })
