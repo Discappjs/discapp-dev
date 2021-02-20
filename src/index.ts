@@ -26,13 +26,16 @@ export function updateCommands(logger: Signale, commandPath: string) {
     require(commandPath)
   )[0] as StaticCommandContract
 
-  try {
-    Command.validate()
-    logger.success(`Command in '${fixedCommandPath}' is ready`)
-  } catch (error) {
-    logger.error(
-      `Command in '${fixedCommandPath}' is not valid, so it was ignored by Discapp. We recommend you to fix or remove this command.`
-    )
+  if (Command) {
+    try {
+      Command.validate()
+      logger.info(`Command in '${fixedCommandPath}' was added`)
+      logger.success(`Command in '${fixedCommandPath}' is ready`)
+    } catch (error) {
+      logger.error(
+        `Command in '${fixedCommandPath}' is not valid, so it was ignored by Discapp. We recommend you to fix or remove this command.`
+      )
+    }
   }
 }
 
@@ -65,7 +68,6 @@ export function watchFiles(storage: typeof Storage) {
       const fixedCommandPath = path.basename(commandPath)
       const commandLogger = appLogger.scope()
 
-      commandLogger.info(`Command in '${fixedCommandPath}' was added`)
       updateCommands(commandLogger, commandPath)
     })
 
